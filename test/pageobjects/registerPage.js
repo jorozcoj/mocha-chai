@@ -1,8 +1,7 @@
-import BasePage from './basePage.js';
+import BasePage from "./basePage.js";
 
 class RegisterPage extends BasePage {
 
-    // Selectors
     get firstName() { return $('#first_name'); }
     get lastName() { return $('#last_name'); }
     get birthDay() { return $('#dob'); }
@@ -14,9 +13,13 @@ class RegisterPage extends BasePage {
     get phone() { return $('#phone'); }
     get email() { return $('#email'); }
     get password() { return $('#password'); }
-    get registerButton() { return $('button[class="btnSubmit mb-3"]'); }
+
+    get registerButton() {
+        return $('.btnSubmit');
+    }
 
     async fillForm(user) {
+
         await this.firstName.setValue(user.firstName);
         await this.lastName.setValue(user.lastName);
         await this.birthDay.setValue(user.birthDay);
@@ -28,11 +31,14 @@ class RegisterPage extends BasePage {
         await this.phone.setValue(user.phone);
         await this.email.setValue(user.email);
         await this.password.setValue(user.password);
+
     }
 
     async submit() {
+        await this.registerButton.waitForClickable();
         await this.registerButton.click();
     }
+
 }
 
 export default new RegisterPage();
