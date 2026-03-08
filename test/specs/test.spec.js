@@ -2,6 +2,7 @@ import { expect, assert, should } from 'chai';
 
 import registerPage from '../pageobjects/registerPage.js';
 import homePage from '../pageobjects/homePage.js';
+import loginPage from '../pageobjects/loginPage.js';
 
 should();
 
@@ -12,18 +13,12 @@ describe('User Registration', () => {
         await homePage.open();
         await homePage.clickSignIn();
 
-        const loginPage = await $('div.col-lg-6.auth-form');
-        await loginPage.waitForDisplayed();
-        assert.exists(loginPage, 'Login page loaded');
+        await loginPage.display()
+        assert.exists(loginPage.loginForm, 'Login page loaded');
 
+        await loginPage.clickRegisterLink(); 
 
-        const registerLink = await $('a[data-test="register-link"]');
-        await registerLink.waitForClickable();
-        await registerLink.click();
-
-
-        const registerForm = await $('div.col-lg-8.auth-form');
-        await registerForm.waitForDisplayed();
+        await registerPage.displayForm()
         
         const user = {
             firstName: 'juan',

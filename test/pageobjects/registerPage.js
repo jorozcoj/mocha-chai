@@ -2,6 +2,8 @@ import BasePage from "./basePage.js";
 
 class RegisterPage extends BasePage {
 
+    get registerForm () {return $('div.col-lg-8.auth-form')};
+
     get firstName() { return $('#first_name'); }
     get lastName() { return $('#last_name'); }
     get birthDay() { return $('#dob'); }
@@ -37,6 +39,10 @@ class RegisterPage extends BasePage {
     async submit() {
         await this.registerButton.waitForClickable();
         await this.registerButton.click();
+    }
+
+    async displayForm (){
+        await this.registerForm.waitForDisplayed();
     }
 
 }
