@@ -14,15 +14,12 @@ class HomePage extends BasePage {
         await super.open('/');
     }
 
-    async clickSignIn() {
-        if (await this.menuButton.isDisplayed()) {
-            await this.menuButton.click();
-            await this.signInElement.waitForClickable();
-            await this.signInElement.click();
-        }
-        
-        await this.menuButton.click()
 
+    async clickSignIn() {
+        /* await this.menuButton.isClickable();
+        await this.menuButton.click();
+
+        await this.menuButton.click(); */
         await this.signInElement.waitForClickable();
         await this.signInElement.click();
     }

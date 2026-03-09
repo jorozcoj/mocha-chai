@@ -1,22 +1,43 @@
-import BasePage from "./basePage";;
+import BasePage from "./basePage";
 
 class LoginPage extends BasePage {
 
-    get loginForm () {
+    get loginForm() {
         return $('div.col-lg-6.auth-form');
     }
 
-    get registerLink () {
+    get registerLink() {
         return $('a[data-test="register-link"]');
     }
 
-    async display (){
+    get email() {
+        return $('#email')
+    }
+
+    get password() {
+        return $('#password')
+    }
+
+    get submitButton() {
+        return $('.btnSubmit')
+    }
+
+    async displayLogin() {
         await this.loginForm.waitForDisplayed();
     }
 
-    async clickRegisterLink(){
+    async clickRegisterLink() {
         await this.registerLink.waitForClickable();
         await this.registerLink.click();
+    }
+
+    async typeCredentials(credentials) {
+        await this.email.setValue(credentials.email);
+        await this.password.setValue(credentials.password)
+    }
+
+    async clickSubmit() {
+        await this.submitButton.click();
     }
 }
 

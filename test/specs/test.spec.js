@@ -3,23 +3,27 @@ import { expect, assert, should } from 'chai';
 import registerPage from '../pageobjects/registerPage.js';
 import homePage from '../pageobjects/homePage.js';
 import loginPage from '../pageobjects/loginPage.js';
+import profilePage from '../pageobjects/profilePage.js';
 
 should();
 
-describe('User Registration', () => {
-
-    it('Should create a new account successfully', async () => {
-
+describe('Practice Software Testing', () => {
+    beforeEach(async () => {
         await homePage.open();
+        await browser.maximizeWindow();
+    })
+
+    it('1. Should create a new account successfully', async () => {
+
         await homePage.clickSignIn();
 
-        await loginPage.display()
+        await loginPage.displayLogin()
         assert.exists(loginPage.loginForm, 'Login page loaded');
 
-        await loginPage.clickRegisterLink(); 
+        await loginPage.clickRegisterLink();
 
         await registerPage.displayForm()
-        
+
         const user = {
             firstName: 'juan',
             lastName: 'Duque',
@@ -30,8 +34,8 @@ describe('User Registration', () => {
             state: 'NY',
             country: 'US',
             phone: '3145879642',
-            email: 'Juan.duque@gmail.com',
-            password: 'password123'
+            email: 'Juan.duque5@gmail.com',
+            password: 'JuanDuque*123'
         };
 
         await registerPage.fillForm(user);
@@ -40,6 +44,70 @@ describe('User Registration', () => {
 
         await registerPage.submit();
 
+        await browser.waitUntil(
+            async () => (await browser.getUrl()).includes('/auth/login'),
+        )
+        await loginPage.loginForm.waitForDisplayed();
     });
 
-});
+    it("2. User should logs in successfully", async () => {
+
+        await homePage.clickSignIn();
+
+        await loginPage.displayLogin()
+
+        const credentials = {
+            email: "Juan.duque5@gmail.com",
+            password: "JuanDuque*123"
+        }
+
+        await loginPage.typeCredentials(credentials);
+        await loginPage.clickSubmit();
+
+        await browser.waitUntil(
+            async () => (await browser.getUrl()).includes('/account')
+        )
+
+    })
+
+    it.only("3. User updates profile information", async () => {
+
+        await homePage.clickSignIn();
+        await loginPage.displayLogin()
+
+        const credentials = {
+            email: "Juan.duque5@gmail.com",
+            password: "JuanDuque*123"
+        }
+
+        await loginPage.typeCredentials(credentials);
+        await loginPage.clickSubmit();
+        await profilePage.displayAccountOptions();
+
+        await profilePage.clickProfileButton();
+
+        await profilePage.waitForText();
+
+        const user = {
+            firstName: 'Cristian',
+            lastName: 'Duque ramirez',
+            birthDay: '1992-08-01',
+            street: 'Evergreen Terrace 742',
+            postalCode: '12345',
+            city: 'Springfield',
+            phone: '3145879642',
+            email: 'Juan.duque5@gmail.com',
+            password: 'JuanDuque*123'
+        };
+
+        await profilePage.modifyProfile(user);
+        await profilePage.clickUpdateProfile();
+
+
+
+        expect(await profilePage.waitForSuccessMessage()).to.equal(true, 'Success message should be displayed');
+
+
+    })
+
+})
