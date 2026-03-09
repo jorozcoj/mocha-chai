@@ -4,6 +4,7 @@ import registerPage from '../pageobjects/registerPage.js';
 import homePage from '../pageobjects/homePage.js';
 import loginPage from '../pageobjects/loginPage.js';
 import profilePage from '../pageobjects/profilePage.js';
+import filterPage from '../pageobjects/filterPage.js';
 
 should();
 
@@ -70,7 +71,7 @@ describe('Practice Software Testing', () => {
 
     })
 
-    it.only("3. User updates profile information", async () => {
+    it("3. User updates profile information", async () => {
 
         await homePage.clickSignIn();
         await loginPage.displayLogin()
@@ -103,11 +104,33 @@ describe('Practice Software Testing', () => {
         await profilePage.modifyProfile(user);
         await profilePage.clickUpdateProfile();
 
-
-
         expect(await profilePage.waitForSuccessMessage()).to.equal(true, 'Success message should be displayed');
+    })
 
+    it.only("4. Filter tools by category", async () => {
+
+        //Select only one checkBox
+        await filterPage.selectOnlyOne("Hammer");
+        const checkbox = await filterPage.categoryByName("Hammer");
+        expect(await checkbox.isSelected()).to.equal(true);
+
+        //Select multiple checkboxes
+        await filterPage.selectMultipleCategories([
+            "Wrench",
+            "Pliers"
+        ])
+
+        const wrench = await filterPage.categoryByName("Wrench")
+        const pliers = await filterPage.categoryByName("Pliers")
+
+        expect(await wrench.isSelected()).to.equal(true)
+        expect(await pliers.isSelected()).to.equal(true)
+    });
+
+    afterEach(async () => {
+        await browser.deleteCookies();
 
     })
+
 
 })
