@@ -1,4 +1,5 @@
 import BasePage from "./basePage";
+import homePage from "./homePage";
 
 class LoginPage extends BasePage {
 
@@ -39,6 +40,17 @@ class LoginPage extends BasePage {
     async clickSubmit() {
         await this.submitButton.click();
     }
+
+    async login(credentials){
+        await homePage.clickSignIn();
+        await this.displayLogin();
+        await this.typeCredentials(credentials);
+        await this.clickSubmit();
+
+        await browser.waitUntil(
+            async () => (await browser.getUrl()).includes('/account')
+        )
+    }    
 }
 
 export default new LoginPage();

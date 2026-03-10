@@ -14,7 +14,6 @@ class HomePage extends BasePage {
         await super.open('/');
     }
 
-
     async clickSignIn() {
         /* await this.menuButton.isClickable();
         await this.menuButton.click();

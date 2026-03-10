@@ -5,6 +5,7 @@ import homePage from '../pageobjects/homePage.js';
 import loginPage from '../pageobjects/loginPage.js';
 import profilePage from '../pageobjects/profilePage.js';
 import filterPage from '../pageobjects/filterPage.js';
+import productsPage from '../pageobjects/productsPage.js';
 
 should();
 
@@ -52,41 +53,27 @@ describe('Practice Software Testing', () => {
     });
 
     it("2. User should logs in successfully", async () => {
-
-        await homePage.clickSignIn();
-
-        await loginPage.displayLogin()
-
+               
         const credentials = {
             email: "Juan.duque5@gmail.com",
             password: "JuanDuque*123"
         }
 
-        await loginPage.typeCredentials(credentials);
-        await loginPage.clickSubmit();
-
-        await browser.waitUntil(
-            async () => (await browser.getUrl()).includes('/account')
-        )
+        await loginPage.login(credentials);      
 
     })
 
     it("3. User updates profile information", async () => {
 
-        await homePage.clickSignIn();
-        await loginPage.displayLogin()
-
         const credentials = {
             email: "Juan.duque5@gmail.com",
             password: "JuanDuque*123"
         }
 
-        await loginPage.typeCredentials(credentials);
-        await loginPage.clickSubmit();
+        await loginPage.login(credentials);
+
         await profilePage.displayAccountOptions();
-
         await profilePage.clickProfileButton();
-
         await profilePage.waitForText();
 
         const user = {
@@ -107,7 +94,7 @@ describe('Practice Software Testing', () => {
         expect(await profilePage.waitForSuccessMessage()).to.equal(true, 'Success message should be displayed');
     })
 
-    it.only("4. Filter tools by category", async () => {
+    it("4. Filter tools by category", async () => {
 
         //Select only one checkBox
         await filterPage.selectOnlyOne("Hammer");
@@ -127,10 +114,17 @@ describe('Practice Software Testing', () => {
         expect(await pliers.isSelected()).to.equal(true)
     });
 
-    afterEach(async () => {
-        await browser.deleteCookies();
-
+    it("5. User should view producto details ", async () => {
+        
+        await productsPage.selectProduct()       
     })
 
+    it("9. user searches for an exact product", async () => {
 
+        await productsPage.searchProduct("Hammer")
+    })
+
+    afterEach(async () => {
+        await browser.deleteCookies();
+    })
 })
