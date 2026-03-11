@@ -131,7 +131,7 @@ describe('Practice Software Testing', () => {
 
     })
 
-    it.only("7. User add products to favorites", async () => {
+    it("7. User add products to favorites", async () => {
         
         await productsPage.selectProduct();
 
