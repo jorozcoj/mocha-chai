@@ -1,3 +1,4 @@
+import { expect, assert, should } from 'chai';
 import BasePage from "./basePage";
 import homePage from "./homePage";
 
@@ -49,7 +50,9 @@ class LoginPage extends BasePage {
 
         await browser.waitUntil(
             async () => (await browser.getUrl()).includes('/account')
-        )
+        );
+        const url = await browser.getUrl();
+        expect(url).to.include('/account');
     }    
 }
 

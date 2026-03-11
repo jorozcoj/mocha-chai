@@ -53,13 +53,13 @@ describe('Practice Software Testing', () => {
     });
 
     it("2. User should logs in successfully", async () => {
-               
+
         const credentials = {
             email: "Juan.duque5@gmail.com",
             password: "JuanDuque*123"
         }
 
-        await loginPage.login(credentials);      
+        await loginPage.login(credentials);
 
     })
 
@@ -115,8 +115,37 @@ describe('Practice Software Testing', () => {
     });
 
     it("5. User should view producto details ", async () => {
+
+        await productsPage.selectProduct();
+        await productsPage.productName.waitForDisplayed();
+
+        expect(await productsPage.productName.isDisplayed()).to.be.true;
+    })
+
+    it("6. User add products to shopping cart", async () => {
+
+        await productsPage.selectProduct();
+        await productsPage.addProductToCart();
+
+        await productsPage.cartIcon.click();
+
+    })
+
+    it.only("7. User add products to favorites", async () => {
         
-        await productsPage.selectProduct()       
+        await productsPage.selectProduct();
+
+        await productsPage.addProductToFavorite();
+
+        await browser.url('/account/favorites');
+
+    })
+
+    it("8. User should change language to spanish ", async () => {
+        await homePage.changeLanguage()
+        const currentLang = await homePage.languageButton.getText();
+        expect(currentLang).to.include('ES')
+
     })
 
     it("9. user searches for an exact product", async () => {
