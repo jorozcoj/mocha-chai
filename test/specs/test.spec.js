@@ -36,7 +36,7 @@ describe('Practice Software Testing', () => {
             state: 'NY',
             country: 'US',
             phone: '3145879642',
-            email: 'Juan.duque5@gmail.com',
+            email: 'Juan.duque@gmail.com',
             password: 'JuanDuque*123'
         };
 
@@ -49,7 +49,7 @@ describe('Practice Software Testing', () => {
         await browser.waitUntil(
             async () => (await browser.getUrl()).includes('/auth/login'),
         )
-        await loginPage.loginForm.waitForDisplayed();
+        expect(await loginPage.loginForm.isDisplayed()).to.equal(true);
     });
 
     it("2. User should logs in successfully", async () => {
@@ -60,6 +60,7 @@ describe('Practice Software Testing', () => {
         }
 
         await loginPage.login(credentials);
+        expect(await browser.getUrl()).to.not.include('/auth/login')
 
     })
 
@@ -125,19 +126,51 @@ describe('Practice Software Testing', () => {
     it("6. User add products to shopping cart", async () => {
 
         await productsPage.selectProduct();
+
+        const productName = await productsPage.productName.getText();
+
         await productsPage.addProductToCart();
 
-        await productsPage.cartIcon.click();
+        await browser.waitUntil(async () => {
+            const count = Number(await productsPage.cartCounter.getText());
+            return count > 0;
+        });
+        const counter = Number(await productsPage.cartCounter.getText());
+
+        expect(counter).to.be.greaterThan(0);
+
+        await productsPage.goToCart();
+
+        const cartProduct = await $('[data-test="product-title"]').getText();
+
+
+        assert.include(cartProduct, productName, "Product should appear in the cart");
 
     })
 
     it("7. User add products to favorites", async () => {
-        
+        const credentials = {
+            email: "Juan.duque5@gmail.com",
+            password: "JuanDuque*123"
+        }
+
+        await loginPage.login(credentials);
+        await homePage.open()
+
         await productsPage.selectProduct();
+
+        const productName = await productsPage.productName.getText();
+
 
         await productsPage.addProductToFavorite();
 
         await browser.url('/account/favorites');
+        const favoriteProduct = await $('[data-test="product-name"]');
+        await favoriteProduct.waitForDisplayed();
+
+        const text = await favoriteProduct.getText();
+
+        text.should.include(productName);
 
     })
 
@@ -148,9 +181,17 @@ describe('Practice Software Testing', () => {
 
     })
 
-    it("9. user searches for an exact product", async () => {
+    it.only("9. user searches for an exact product", async () => {
 
-        await productsPage.searchProduct("Hammer")
+        await productsPage.searchProduct("Saw")
+
+        await productsPage.loadSearch()
+
+        const products = await productsPage.products
+
+        const firstProduct = products[0]
+
+        await firstProduct.click()
     })
 
     afterEach(async () => {
