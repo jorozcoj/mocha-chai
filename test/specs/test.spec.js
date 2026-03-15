@@ -36,7 +36,7 @@ describe('Practice Software Testing', () => {
             state: 'NY',
             country: 'US',
             phone: '3145879642',
-            email: 'Juan.duque@gmail.com',
+            email: 'Juan.duque5@gmail.com',
             password: 'JuanDuque*123'
         };
 
